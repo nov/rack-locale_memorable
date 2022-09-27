@@ -1,8 +1,6 @@
 # Rack::LocaleMemorable
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/rack/locale_memorable`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Handle query params, cookie and HTTP_ACCEPT_LANGUAGE header to detect user-preffered locale, and remember it when necessary.
 
 ## Installation
 
@@ -16,7 +14,29 @@ If bundler is not being used to manage dependencies, install the gem by executin
 
 ## Usage
 
-TODO: Write usage instructions here
+```ruby
+# in initializers/middlewares.rb etc.
+Rails.application.configure do |config|
+  config.middleware.use(
+    Rack::LocaleMemorable,
+    params_key: 'ui_locales',
+    secure_cookie: Rails.env.production?
+  )
+end
+```
+
+NOTE: If you're using devise, set `Rack::LocaleMemorable` before `Warden::Manager`, otherwise you see warden error messages in wrong locale.
+
+```ruby
+Rails.application.configure do |config|
+  config.middleware.insert_before(
+    Warden::Manager,
+    Rack::LocaleMemorable,
+    params_key: 'ui_locales',
+    secure_cookie: Rails.env.production?
+  )
+end
+```
 
 ## Development
 

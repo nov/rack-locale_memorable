@@ -1,5 +1,6 @@
 ## [Unreleased]
 
-## [0.1.0] - 2022-09-28
+## [0.3.0] - 2022-09-28
 
-- Initial release
+- First stable release.
+- Older versions are buggy, DO NOT USE THEM.
