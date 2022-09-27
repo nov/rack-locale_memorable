@@ -8,7 +8,7 @@ end
 
 require 'rspec'
 require 'rack/test'
-require 'rack/locale'
+require 'rack/locale_memorable'
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

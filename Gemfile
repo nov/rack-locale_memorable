@@ -2,5 +2,5 @@
 
 source 'https://rubygems.org'
 
-# Specify your gem's dependencies in rack-locale.gemspec
+# Specify your gem's dependencies in rack-locale_memorable.gemspec
 gemspec

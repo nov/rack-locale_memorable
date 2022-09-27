@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
-class Rack::Locale::TestApplication
+class Rack::LocaleMemorable::TestApplication
   def call(_env)
     [200, {}, I18n.locale]
   end
 end
 
-RSpec.describe Rack::Locale do
+RSpec.describe Rack::LocaleMemorable do
   include Rack::Test::Methods
 
-  let(:app) { described_class.new Rack::Locale::TestApplication.new }
+  let(:app) { described_class.new Rack::LocaleMemorable::TestApplication.new }
   let(:env) { Rack::MockRequest.env_for('/', headers.merge(params: params)) }
   let(:params) { {} }
   let(:headers) { {} }
