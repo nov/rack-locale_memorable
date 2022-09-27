@@ -24,7 +24,8 @@ module Rack
           response.remember_locale(
             request.explicit_locale,
             secure_cookie: @secure_cookie,
-            cookie_expiry: @cookie_expiry
+            cookie_expiry: @cookie_expiry,
+            cookie_key: @cookie_key
           )
         end
         response.finish
