@@ -31,6 +31,6 @@ module Rack
   end
 end
 
-require 'rack/locale_memorable/version'
-require 'rack/locale_memorable/request'
-require 'rack/locale_memorable/response'
+require_relative 'locale_memorable/version'
+require_relative 'locale_memorable/request'
+require_relative 'locale_memorable/response'
