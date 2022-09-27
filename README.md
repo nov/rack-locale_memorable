@@ -17,10 +17,7 @@ If bundler is not being used to manage dependencies, install the gem by executin
 ```ruby
 # in initializers/middlewares.rb etc.
 Rails.application.configure do |config|
-  config.middleware.use(
-    Rack::LocaleMemorable,
-    secure_cookie: Rails.env.production?
-  )
+  config.middleware.use Rack::LocaleMemorable
 end
 ```
 
@@ -28,10 +25,32 @@ NOTE: If you're using devise, set `Rack::LocaleMemorable` before `Warden::Manage
 
 ```ruby
 Rails.application.configure do |config|
-  config.middleware.insert_before(
-    Warden::Manager,
+  config.middleware.insert_before Warden::Manager, Rack::LocaleMemorable
+end
+```
+
+By default, this gem handles
+
+* `params['locale']` as explicit locale
+* `cookies['locale']` as remembered locale
+* `headers['HTTP_ACCEPT_LANGUAGE']` as implicit locale
+
+and when explicit locale is specified in the request, remember it in cookie.
+
+You can customize those values
+* params_key (`'locale'` by default)
+* cookie_key (`'locale'` by default)
+* secure_cookie (`true` by default)
+* cookie_lifetime (`1.year` by default)
+
+```ruby
+Rails.application.configure do |config|
+  config.middleware.use(
     Rack::LocaleMemorable,
-    secure_cookie: Rails.env.production?
+    params_key: 'ui_locale',
+    cookie_key: 'ui_locale',
+    secure_cookie: Rails.env.production?,
+    cookie_lifetime: 3.months
   )
 end
 ```

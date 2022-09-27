@@ -7,12 +7,12 @@ require 'rack'
 
 module Rack
   class LocaleMemorable
-    def initialize(app, params_key: 'locale', cookie_key: 'locale', secure_cookie: true, cookie_expiry: 1.year.from_now)
+    def initialize(app, params_key: 'locale', cookie_key: 'locale', secure_cookie: true, cookie_lifetime: 1.year)
       @app = app
       @params_key = params_key
       @cookie_key = cookie_key
       @secure_cookie = secure_cookie
-      @cookie_expiry = cookie_expiry
+      @cookie_lifetime = cookie_lifetime
     end
 
     def call(env)
@@ -24,7 +24,7 @@ module Rack
           response.remember_locale(
             request.explicit_locale,
             secure_cookie: @secure_cookie,
-            cookie_expiry: @cookie_expiry,
+            cookie_lifetime: @cookie_lifetime,
             cookie_key: @cookie_key
           )
         end

@@ -3,10 +3,10 @@
 module Rack
   class LocaleMemorable
     class Response < Rack::Response
-      def remember_locale(explicit_locale, secure_cookie:, cookie_expiry:, cookie_key:)
+      def remember_locale(explicit_locale, secure_cookie:, cookie_lifetime:, cookie_key:)
         set_cookie cookie_key, {
           value: explicit_locale,
-          expires: cookie_expiry,
+          expires: cookie_lifetime.from_now,
           http_only: true,
           secure: secure_cookie
         }
