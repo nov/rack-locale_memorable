@@ -16,8 +16,8 @@ module Rack
     end
 
     def call(env)
-      request = Request.new(env, params_key: @params_key, cookie_key: @cookie_key)
-      I18n.with_locale(request.detect_locale) do
+      request = Request.new env
+      I18n.with_locale(request.detect_locale params_key: @params_key, cookie_key: @cookie_key) do
         status, headers, body = @app.call(env)
         response = Response.new body, status, headers
         if request.explicit_locale.present?
