@@ -19,7 +19,6 @@ If bundler is not being used to manage dependencies, install the gem by executin
 Rails.application.configure do |config|
   config.middleware.use(
     Rack::LocaleMemorable,
-    params_key: 'ui_locales',
     secure_cookie: Rails.env.production?
   )
 end
@@ -32,7 +31,6 @@ Rails.application.configure do |config|
   config.middleware.insert_before(
     Warden::Manager,
     Rack::LocaleMemorable,
-    params_key: 'ui_locales',
     secure_cookie: Rails.env.production?
   )
 end
