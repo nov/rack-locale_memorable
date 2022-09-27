@@ -43,6 +43,8 @@ You can customize those values
 * secure_cookie (`true` by default)
 * cookie_lifetime (`1.year` by default)
 
+like below
+
 ```ruby
 Rails.application.configure do |config|
   config.middleware.use(
