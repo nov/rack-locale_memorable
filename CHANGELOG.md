@@ -1,5 +1,12 @@
 ## [Unreleased]
 
+## [0.3.3] - 2022-09-28
+
+### Refactored
+
+- requre active_support/core_ext only https://github.com/nov/rack-locale_memorable/commit/bf56b49f064a30d9688d65d2dd2901763bf31cee
+- stop using request class's instance variables following response class's design https://github.com/nov/rack-locale_memorable/commit/056807010fcb5c01d4d1745f06f8a9f87aad2ec6
+
 ## [0.3.2] - 2022-09-28
 
 ### Fixed
