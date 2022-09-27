@@ -1,5 +1,11 @@
 ## [Unreleased]
 
+## [0.3.2] - 2022-09-28
+
+### Fixed
+
+- handle cookie expiry correctly https://github.com/nov/rack-locale_memorable/commit/886fed66da5513a4c0b6408a9ac7685932b0a034
+
 ## [0.3.1] - 2022-09-28
 
 ### Fixed
