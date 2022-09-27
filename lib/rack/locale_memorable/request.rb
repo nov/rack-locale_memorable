@@ -3,7 +3,13 @@
 module Rack
   class LocaleMemorable
     class Request < Rack::Request
-      attr_reader :explicit_locale
+      attr_reader :explicit_locale, :params_key, :cookie_key
+
+      def initialize(env, params_key:, cookie_key:)
+        super env
+        @params_key = params_key
+        @cookie_key = cookie_key
+      end
 
       def detect_locale
         (
@@ -16,11 +22,11 @@ module Rack
       private
 
       def from_params
-        @explicit_locale = primary_locale_from params['locale']
+        @explicit_locale = primary_locale_from params[params_key]
       end
 
       def from_cookies
-        primary_locale_from cookies['locale']
+        primary_locale_from cookies[cookie_key]
       end
 
       def from_headers
