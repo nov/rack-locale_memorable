@@ -21,14 +21,6 @@ Rails.application.configure do |config|
 end
 ```
 
-NOTE: If you're using devise, set `Rack::LocaleMemorable` before `Warden::Manager`, otherwise you see warden error messages in wrong locale.
-
-```ruby
-Rails.application.configure do |config|
-  config.middleware.insert_before Warden::Manager, Rack::LocaleMemorable
-end
-```
-
 By default, this gem handles locale variables in 3 places in the order below, and when explicit locale is specified (= when locale is specified via query params) in the request, remember it in cookie too.
 
 1. `params['locale']` as explicit locale
@@ -53,6 +45,14 @@ Rails.application.configure do |config|
     secure_cookie: Rails.env.production?,
     cookie_lifetime: 3.months
   )
+end
+```
+
+NOTE: If you're using devise, set `Rack::LocaleMemorable` before `Warden::Manager`, otherwise you see warden error messages in wrong locale.
+
+```ruby
+Rails.application.configure do |config|
+  config.middleware.insert_before Warden::Manager, Rack::LocaleMemorable
 end
 ```
 
