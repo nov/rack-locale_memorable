@@ -1,5 +1,11 @@
 ## [Unreleased]
 
+## [0.3.4] - 2022-09-28
+
+### Fixed
+
+- fix changelog url https://github.com/nov/rack-locale_memorable/commit/fc744c6fe1489cee12225b8cc5991a9f4d797278
+
 ## [0.3.3] - 2022-09-28
 
 ### Refactored
