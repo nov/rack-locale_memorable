@@ -29,10 +29,13 @@ By default, this gem handles locale variables in 3 places in the order below, an
 
 There are several customizable options listed below.
 
-* params_key (`'locale'` by default)
-* cookie_key (`'locale'` by default)
-* secure_cookie (`true` by default)
-* cookie_lifetime (`1.year` by default)
+* `params_key` (`'locale'` by default)
+* `cookie_key` (`'locale'` by default)
+* `cookie_options[:lifetime]` (`1.year` by default)
+* `cookie_options[:domain]` (`nil` by default)
+* `cookie_options[:path]` (`nil` by default)
+* `cookie_options[:http_only]` (`true` by default)
+* `cookie_options[:secure]` (`true` by default)
 
 You can customize them like below
 
@@ -42,8 +45,13 @@ Rails.application.configure do |config|
     Rack::LocaleMemorable,
     params_key: 'ui_locale',
     cookie_key: 'ui_locale',
-    secure_cookie: Rails.env.production?,
-    cookie_lifetime: 3.months
+    cookie_options: {
+      lifetime:  3.months,
+      domain:    'example.com',
+      path:      '/localized',
+      http_only: false,
+      secure:    Rails.env.production?
+    }
   )
 end
 ```
