@@ -7,6 +7,7 @@ SimpleCov.start do
 end
 
 require 'rspec'
+require 'timecop'
 require 'rack/test'
 require 'rack/locale_memorable'
 

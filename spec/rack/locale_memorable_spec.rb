@@ -14,6 +14,8 @@ RSpec.describe Rack::LocaleMemorable do
   let(:params) { {} }
   let(:headers) { {} }
   let(:request) { app.call(env) }
+  let(:params_key) { 'locale' }
+  let(:cookie_key) { 'locale' }
 
   before do
     I18n.available_locales = [:en, :ja]
@@ -39,7 +41,7 @@ RSpec.describe Rack::LocaleMemorable do
     it 'should remember specified locale' do
       _status, headers, _body = request
       expect(headers['Set-Cookie']).not_to be_blank
-      expect(headers['Set-Cookie']).to include "locale=#{expected_locale}"
+      expect(headers['Set-Cookie']).to include "#{cookie_key}=#{expected_locale}"
     end
   end
 
@@ -50,121 +52,269 @@ RSpec.describe Rack::LocaleMemorable do
     end
   end
 
-  describe 'GET /' do
-    context 'with no locales' do
-      it_behaves_like :handled_with_default_locale
+  context 'with no locales' do
+    it_behaves_like :handled_with_default_locale
+  end
+
+  I18n.available_locales.each do |specified_locale|
+    context "with locale=#{specified_locale}" do
+      let(:expected_locale) { specified_locale }
+
+      context 'in query' do
+        let(:params) do
+          {
+            params_key => specified_locale
+          }
+        end
+        it_behaves_like :handled_with_specified_locale
+        it_behaves_like :remember_specified_locale
+      end
+
+      context 'in cookie' do
+        let(:headers) do
+          {
+            'HTTP_COOKIE' => "#{cookie_key}=#{specified_locale}"
+          }
+        end
+        it_behaves_like :handled_with_specified_locale
+        it_behaves_like :remember_no_locale
+      end
+
+      context 'in header' do
+        let(:headers) do
+          {
+            'HTTP_ACCEPT_LANGUAGE' => specified_locale.to_s
+          }
+        end
+        it_behaves_like :handled_with_specified_locale
+        it_behaves_like :remember_no_locale
+      end
     end
+  end
 
-    I18n.available_locales.each do |specified_locale|
-      context "with locale=#{specified_locale}" do
-        let(:expected_locale) { specified_locale }
+  {
+    'ja-JP' => :ja,
+    'en-US' => :en,
+    'en-UK' => :en,
+    'ja-JP,ja' => :ja,
+    'en-US,en' => :en,
+    'en-UK,en' => :en,
+    'en-UK,en-US,en' => :en,
+    'ja-JP,en-US' => :ja,
+    'en-US,ja-JP' => :en,
+    'en-UK, fr;q=0.9, zh;q=0.8, de;q=0.7, *;q=0.5' => :en
+  }.each do |specified_locale, expected_locale|
+    context "with locale=#{specified_locale}" do
+      let(:expected_locale) { expected_locale }
 
-        context 'in query' do
-          let(:params) do
-            {
-              'locale' => specified_locale
-            }
-          end
-          it_behaves_like :handled_with_specified_locale
-          it_behaves_like :remember_specified_locale
+      context 'in query' do
+        let(:params) do
+          {
+            params_key => specified_locale
+          }
         end
+        it_behaves_like :handled_with_specified_locale
+        it_behaves_like :remember_specified_locale
+      end
 
-        context 'in cookie' do
-          let(:headers) do
-            {
-              'HTTP_COOKIE' => "locale=#{specified_locale}"
-            }
-          end
-          it_behaves_like :handled_with_specified_locale
-          it_behaves_like :remember_no_locale
+      context 'in cookie' do
+        let(:headers) do
+          {
+            'HTTP_COOKIE' => "#{cookie_key}=#{specified_locale}"
+          }
         end
+        it_behaves_like :handled_with_specified_locale
+        it_behaves_like :remember_no_locale
+      end
 
-        context 'in header' do
-          let(:headers) do
-            {
-              'HTTP_ACCEPT_LANGUAGE' => specified_locale.to_s
-            }
-          end
-          it_behaves_like :handled_with_specified_locale
-          it_behaves_like :remember_no_locale
+      context 'in header' do
+        let(:headers) do
+          {
+            'HTTP_ACCEPT_LANGUAGE' => specified_locale.to_s
+          }
         end
+        it_behaves_like :handled_with_specified_locale
+        it_behaves_like :remember_no_locale
+      end
+    end
+  end
+
+  [',en', 'fr', 'fr;q=0.9, zh;q=0.8, de;q=0.7, *;q=0.5'].each do |specified_locale|
+    context "with locale=#{specified_locale}" do
+      context 'in query' do
+        let(:params) do
+          {
+            params_key => specified_locale
+          }
+        end
+        it_behaves_like :handled_with_default_locale
+      end
+
+      context 'in cookie' do
+        let(:headers) do
+          {
+            'HTTP_COOKIE' => "#{cookie_key}=#{specified_locale}"
+          }
+        end
+        it_behaves_like :handled_with_default_locale
+      end
+
+      context 'in header' do
+        let(:headers) do
+          {
+            'HTTP_ACCEPT_LANGUAGE' => specified_locale.to_s
+          }
+        end
+        it_behaves_like :handled_with_default_locale
+      end
+    end
+  end
+
+  describe 'customizable options' do
+    context 'when params_key is specified' do
+      let(:app) { described_class.new Rack::LocaleMemorable::TestApplication.new, params_key: params_key }
+      let(:params_key) { 'ui_locale' }
+      let(:specified_locale) { :en }
+      let(:expected_locale) { specified_locale }
+      let(:params) do
+        {
+          params_key => specified_locale
+        }
+      end
+      it_behaves_like :handled_with_specified_locale
+      it_behaves_like :remember_specified_locale
+
+      context 'when cookie_key is specified' do
+        let(:app) { described_class.new Rack::LocaleMemorable::TestApplication.new, params_key: params_key, cookie_key: cookie_key }
+        let(:cookie_key) { 'ui_locale' }
+        it_behaves_like :handled_with_specified_locale
+        it_behaves_like :remember_specified_locale
       end
     end
 
-    {
-      'ja-JP' => :ja,
-      'en-US' => :en,
-      'en-UK' => :en,
-      'ja-JP,ja' => :ja,
-      'en-US,en' => :en,
-      'en-UK,en' => :en,
-      'en-UK,en-US,en' => :en,
-      'ja-JP,en-US' => :ja,
-      'en-US,ja-JP' => :en,
-      'en-UK, fr;q=0.9, zh;q=0.8, de;q=0.7, *;q=0.5' => :en
-    }.each do |specified_locale, expected_locale|
-      context "with locale=#{specified_locale}" do
-        let(:expected_locale) { expected_locale }
-
-        context 'in query' do
-          let(:params) do
-            {
-              'locale' => specified_locale
-            }
-          end
-          it_behaves_like :handled_with_specified_locale
-          it_behaves_like :remember_specified_locale
-        end
-
-        context 'in cookie' do
-          let(:headers) do
-            {
-              'HTTP_COOKIE' => "locale=#{specified_locale}"
-            }
-          end
-          it_behaves_like :handled_with_specified_locale
-          it_behaves_like :remember_no_locale
-        end
-
-        context 'in header' do
-          let(:headers) do
-            {
-              'HTTP_ACCEPT_LANGUAGE' => specified_locale.to_s
-            }
-          end
-          it_behaves_like :handled_with_specified_locale
-          it_behaves_like :remember_no_locale
-        end
+    context 'when cookie_key is specified' do
+      let(:app) { described_class.new Rack::LocaleMemorable::TestApplication.new, cookie_key: cookie_key }
+      let(:cookie_key) { 'ui_locale' }
+      let(:specified_locale) { :en }
+      let(:expected_locale) { specified_locale }
+      let(:headers) do
+        {
+          'HTTP_COOKIE' => "#{cookie_key}=#{specified_locale}"
+        }
       end
+      it_behaves_like :handled_with_specified_locale
+      it_behaves_like :remember_no_locale
     end
 
-    [',en', 'fr', 'fr;q=0.9, zh;q=0.8, de;q=0.7, *;q=0.5'].each do |specified_locale|
-      context "with locale=#{specified_locale}" do
-        context 'in query' do
-          let(:params) do
-            {
-              'locale' => specified_locale
-            }
-          end
-          it_behaves_like :handled_with_default_locale
+    describe 'cookie_options' do
+      let(:app) { described_class.new Rack::LocaleMemorable::TestApplication.new, cookie_options: cookie_options }
+      let(:specified_locale) { :en }
+      let(:expected_locale) { specified_locale }
+      let(:params) do
+        {
+          params_key => specified_locale
+        }
+      end
+
+      context 'when lifetime is specified' do
+        let(:cookie_options) do
+          {
+            lifetime: 3.months
+          }
         end
 
-        context 'in cookie' do
-          let(:headers) do
-            {
-              'HTTP_COOKIE' => "locale=#{specified_locale}"
-            }
+        it 'should use it' do
+          Timecop.freeze do
+            expect_any_instance_of(Rack::LocaleMemorable::Response).to receive(:set_cookie).with(cookie_key, {
+              value: expected_locale.to_s,
+              expires: cookie_options[:lifetime].from_now,
+              http_only: true,
+              secure: true
+            })
+            request
           end
-          it_behaves_like :handled_with_default_locale
+        end
+      end
+
+      context 'when domain is specified' do
+        let(:cookie_options) do
+          {
+            domain: '.example.com'
+          }
         end
 
-        context 'in header' do
-          let(:headers) do
-            {
-              'HTTP_ACCEPT_LANGUAGE' => specified_locale.to_s
-            }
+        it 'should use it' do
+          Timecop.freeze do
+            expect_any_instance_of(Rack::LocaleMemorable::Response).to receive(:set_cookie).with(cookie_key, {
+              value: expected_locale.to_s,
+              expires: 1.year.from_now,
+              domain: cookie_options[:domain],
+              http_only: true,
+              secure: true
+            })
+            request
           end
-          it_behaves_like :handled_with_default_locale
+        end
+      end
+
+      context 'when path is specified' do
+        let(:cookie_options) do
+          {
+            path: '/foo'
+          }
+        end
+
+        it 'should use it' do
+          Timecop.freeze do
+            expect_any_instance_of(Rack::LocaleMemorable::Response).to receive(:set_cookie).with(cookie_key, {
+              value: expected_locale.to_s,
+              expires: 1.year.from_now,
+              path: cookie_options[:path],
+              http_only: true,
+              secure: true
+            })
+            request
+          end
+        end
+      end
+
+      context 'when http_only is specified' do
+        let(:cookie_options) do
+          {
+            http_only: false
+          }
+        end
+
+        it 'should use it' do
+          Timecop.freeze do
+            expect_any_instance_of(Rack::LocaleMemorable::Response).to receive(:set_cookie).with(cookie_key, {
+              value: expected_locale.to_s,
+              expires: 1.year.from_now,
+              http_only: false,
+              secure: true
+            })
+            request
+          end
+        end
+      end
+
+      context 'when secure is specified' do
+        let(:cookie_options) do
+          {
+            secure: false
+          }
+        end
+
+        it 'should use it' do
+          Timecop.freeze do
+            expect_any_instance_of(Rack::LocaleMemorable::Response).to receive(:set_cookie).with(cookie_key, {
+              value: expected_locale.to_s,
+              expires: 1.year.from_now,
+              http_only: true,
+              secure: false
+            })
+            request
+          end
         end
       end
     end
