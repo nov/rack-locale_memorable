@@ -29,21 +29,20 @@ Rails.application.configure do |config|
 end
 ```
 
-By default, this gem handles
+By default, this gem handles locale variables in 3 places in the order below, and when explicit locale is specified (= when locale is specified via query params) in the request, remember it in cookie too.
 
-* `params['locale']` as explicit locale
-* `cookies['locale']` as remembered locale
-* `headers['HTTP_ACCEPT_LANGUAGE']` as implicit locale
+1. `params['locale']` as explicit locale
+2. `cookies['locale']` as remembered locale
+3. `headers['HTTP_ACCEPT_LANGUAGE']` as implicit locale
 
-and when explicit locale is specified in the request, remember it in cookie.
+There are several customizable options listed below.
 
-You can customize those values
 * params_key (`'locale'` by default)
 * cookie_key (`'locale'` by default)
 * secure_cookie (`true` by default)
 * cookie_lifetime (`1.year` by default)
 
-like below
+You can customize them like below
 
 ```ruby
 Rails.application.configure do |config|
