@@ -319,8 +319,4 @@ RSpec.describe Rack::LocaleMemorable do
       end
     end
   end
-
-  it do
-    should fail
-  end
 end
