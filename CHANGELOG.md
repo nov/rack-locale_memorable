@@ -1,5 +1,11 @@
 ## [Unreleased]
 
+## [0.4.0] - 2022-09-28
+
+### Changed
+
+- change cookie option interface and add spec for customizable options https://github.com/nov/rack-locale_memorable/commit/e25350bd045db2369233ec293fece73b571d652b
+
 ## [0.3.4] - 2022-09-28
 
 ### Fixed
