@@ -64,6 +64,10 @@ Rails.application.configure do |config|
 end
 ```
 
+ref.) related issue in devise & warden
+* https://github.com/heartcombo/devise/issues/5247
+* https://github.com/wardencommunity/warden/issues/180
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
