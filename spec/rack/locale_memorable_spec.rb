@@ -228,6 +228,7 @@ RSpec.describe Rack::LocaleMemorable do
             expect_any_instance_of(Rack::LocaleMemorable::Response).to receive(:set_cookie).with(cookie_key, {
               value: expected_locale.to_s,
               expires: cookie_options[:lifetime].from_now,
+              path: '/',
               http_only: true,
               secure: true
             })
@@ -249,6 +250,7 @@ RSpec.describe Rack::LocaleMemorable do
               value: expected_locale.to_s,
               expires: 1.year.from_now,
               domain: cookie_options[:domain],
+              path: '/',
               http_only: true,
               secure: true
             })
@@ -290,6 +292,7 @@ RSpec.describe Rack::LocaleMemorable do
             expect_any_instance_of(Rack::LocaleMemorable::Response).to receive(:set_cookie).with(cookie_key, {
               value: expected_locale.to_s,
               expires: 1.year.from_now,
+              path: '/',
               http_only: false,
               secure: true
             })
@@ -310,6 +313,7 @@ RSpec.describe Rack::LocaleMemorable do
             expect_any_instance_of(Rack::LocaleMemorable::Response).to receive(:set_cookie).with(cookie_key, {
               value: expected_locale.to_s,
               expires: 1.year.from_now,
+              path: '/',
               http_only: true,
               secure: false
             })
