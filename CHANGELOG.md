@@ -1,5 +1,12 @@
 ## [Unreleased]
 
+## [0.4.1] - 2022-09-29
+
+### Fixed
+
+- make default path "/" https://github.com/nov/rack-locale_memorable/commit/439868e4d2f6a917be1234fa2d9bdbfab41fce69
+
+
 ## [0.4.0] - 2022-09-28
 
 ### Changed
