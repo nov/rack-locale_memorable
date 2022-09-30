@@ -68,6 +68,47 @@ ref.) related issue in devise & warden
 * https://github.com/heartcombo/devise/issues/5247
 * https://github.com/wardencommunity/warden/issues/180
 
+
+## Detailed locale handling
+
+See rspec results.
+
+```console
+% bundle exec rspec --format=documentation
+
+Rack::LocaleMemorable
+  with no locales
+    behaves like handled_with_default_locale
+      should use default locale
+  channel priority
+    when locale is specified
+      via query
+        when different locale is included
+          in cookie
+            behaves like handled_with_specified_locale
+              should use specified locale
+            behaves like remember_specified_locale
+              should remember specified locale
+          in header
+            behaves like handled_with_specified_locale
+              should use specified locale
+            behaves like remember_specified_locale
+              should remember specified locale
+          in cookie & header
+            behaves like handled_with_specified_locale
+              should use specified locale
+            behaves like remember_specified_locale
+              should remember specified locale
+      via cookie
+        when different locale is included
+          in header
+            behaves like handled_with_specified_locale
+              should use specified locale
+            behaves like remember_no_locale
+              should not remember specified locale
+              :
+```
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
