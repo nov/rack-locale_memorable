@@ -33,7 +33,7 @@ There are several customizable options listed below.
 * `cookie_key` (`'locale'` by default)
 * `cookie_options[:lifetime]` (`1.year` by default)
 * `cookie_options[:domain]` (`nil` by default)
-* `cookie_options[:path]` (`nil` by default)
+* `cookie_options[:path]` (`/` by default)
 * `cookie_options[:http_only]` (`true` by default)
 * `cookie_options[:secure]` (`true` by default)
 
