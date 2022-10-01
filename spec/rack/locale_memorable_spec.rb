@@ -44,6 +44,7 @@ RSpec.describe Rack::LocaleMemorable do
     it 'should remember expected locale' do
       _status, headers, _body = request
       expect(headers['Set-Cookie']).not_to be_nil
+      expect(headers['Set-Cookie']).not_to be_empty
       expect(headers['Set-Cookie']).to include "#{cookie_key}=#{expected_locale}"
     end
   end
@@ -205,7 +206,7 @@ RSpec.describe Rack::LocaleMemorable do
     end
   end
 
-  [',en', 'fr', 'fr;q=0.9, zh;q=0.8, de;q=0.7, *;q=0.5'].each do |specified_locale|
+  ['', ',en', 'fr', 'fr;q=0.9, zh;q=0.8, de;q=0.7, *;q=0.5'].each do |specified_locale|
     context "with locale=#{specified_locale}" do
       context 'via query' do
         let(:params) do
