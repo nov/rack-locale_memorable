@@ -14,7 +14,7 @@ namespace :coverage do
 end
 
 task :spec do
-  Rake::Task[:'coverage:report'].invoke
+  Rake::Task[:'coverage:report'].invoke unless ENV['GITHUB_ACTIONS']
 end
 
 task default: :spec
