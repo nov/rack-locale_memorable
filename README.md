@@ -2,7 +2,7 @@
 
 Handle query params, cookie and HTTP_ACCEPT_LANGUAGE header to detect user-preffered locale, and remember it when necessary.
 
-Since some libraries (e.g., Devise & Warden) handles i18n strings in rack-middleware layer, setting `I18n.locale` is not enough for some cases.
+Since some libraries (e.g., Devise & Warden) or applications may handle i18n strings in rack-middleware layer, setting `I18n.locale` in Rails layer is not enough in such cases.
 
 This gem sets `I18n.locale` in rack-middleware layer, so that you can let other rack-middlewares use proper `I18n.locale`.
 
