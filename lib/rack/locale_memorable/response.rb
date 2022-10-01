@@ -13,6 +13,11 @@ module Rack
           secure:    secure
         }.compact
       end
+
+      def finish
+        headers['Content-Language'] ||= I18n.locale.to_s
+        super
+      end
     end
   end
 end

@@ -25,19 +25,22 @@ RSpec.describe Rack::LocaleMemorable do
   shared_examples :handled_with_default_locale do
     it 'should use default locale' do
       _status, headers, body = request
-      expect(headers).to be_blank
+      expect(headers['Content-Language']).to eq I18n.default_locale.to_s
       expect(body).to eq I18n.default_locale
+      expect(env['rack.locale']).to eq I18n.default_locale.to_s
     end
   end
 
-  shared_examples :handled_with_specified_locale do
+  shared_examples :handled_with_expected_locale do
     it 'should use specified locale' do
-      _status, _headers, body = request
+      _status, headers, body = request
+      expect(headers['Content-Language']).to eq expected_locale.to_s
       expect(body).to eq expected_locale
+      expect(env['rack.locale']).to eq expected_locale.to_s
     end
   end
 
-  shared_examples :remember_specified_locale do
+  shared_examples :remember_expected_locale do
     it 'should remember specified locale' do
       _status, headers, _body = request
       expect(headers['Set-Cookie']).not_to be_blank
@@ -75,8 +78,8 @@ RSpec.describe Rack::LocaleMemorable do
                 'HTTP_COOKIE' => "#{cookie_key}=#{different_locale}"
               }
             end
-            it_behaves_like :handled_with_specified_locale
-            it_behaves_like :remember_specified_locale
+            it_behaves_like :handled_with_expected_locale
+            it_behaves_like :remember_expected_locale
           end
 
           context 'in header' do
@@ -85,8 +88,8 @@ RSpec.describe Rack::LocaleMemorable do
                 'HTTP_ACCEPT_LANGUAGE' => different_locale.to_s
               }
             end
-            it_behaves_like :handled_with_specified_locale
-            it_behaves_like :remember_specified_locale
+            it_behaves_like :handled_with_expected_locale
+            it_behaves_like :remember_expected_locale
           end
 
           context 'in cookie & header' do
@@ -96,8 +99,8 @@ RSpec.describe Rack::LocaleMemorable do
                 'HTTP_ACCEPT_LANGUAGE' => different_locale.to_s
               }
             end
-            it_behaves_like :handled_with_specified_locale
-            it_behaves_like :remember_specified_locale
+            it_behaves_like :handled_with_expected_locale
+            it_behaves_like :remember_expected_locale
           end
         end
       end
@@ -111,7 +114,7 @@ RSpec.describe Rack::LocaleMemorable do
                 'HTTP_ACCEPT_LANGUAGE' => different_locale.to_s
               }
             end
-            it_behaves_like :handled_with_specified_locale
+            it_behaves_like :handled_with_expected_locale
             it_behaves_like :remember_no_locale
           end
         end
@@ -129,8 +132,8 @@ RSpec.describe Rack::LocaleMemorable do
             params_key => specified_locale
           }
         end
-        it_behaves_like :handled_with_specified_locale
-        it_behaves_like :remember_specified_locale
+        it_behaves_like :handled_with_expected_locale
+        it_behaves_like :remember_expected_locale
       end
 
       context 'via cookie' do
@@ -139,7 +142,7 @@ RSpec.describe Rack::LocaleMemorable do
             'HTTP_COOKIE' => "#{cookie_key}=#{specified_locale}"
           }
         end
-        it_behaves_like :handled_with_specified_locale
+        it_behaves_like :handled_with_expected_locale
         it_behaves_like :remember_no_locale
       end
 
@@ -149,7 +152,7 @@ RSpec.describe Rack::LocaleMemorable do
             'HTTP_ACCEPT_LANGUAGE' => specified_locale.to_s
           }
         end
-        it_behaves_like :handled_with_specified_locale
+        it_behaves_like :handled_with_expected_locale
         it_behaves_like :remember_no_locale
       end
     end
@@ -176,8 +179,8 @@ RSpec.describe Rack::LocaleMemorable do
             params_key => specified_locale
           }
         end
-        it_behaves_like :handled_with_specified_locale
-        it_behaves_like :remember_specified_locale
+        it_behaves_like :handled_with_expected_locale
+        it_behaves_like :remember_expected_locale
       end
 
       context 'via cookie' do
@@ -186,7 +189,7 @@ RSpec.describe Rack::LocaleMemorable do
             'HTTP_COOKIE' => "#{cookie_key}=#{specified_locale}"
           }
         end
-        it_behaves_like :handled_with_specified_locale
+        it_behaves_like :handled_with_expected_locale
         it_behaves_like :remember_no_locale
       end
 
@@ -196,7 +199,7 @@ RSpec.describe Rack::LocaleMemorable do
             'HTTP_ACCEPT_LANGUAGE' => specified_locale.to_s
           }
         end
-        it_behaves_like :handled_with_specified_locale
+        it_behaves_like :handled_with_expected_locale
         it_behaves_like :remember_no_locale
       end
     end
@@ -244,14 +247,14 @@ RSpec.describe Rack::LocaleMemorable do
           params_key => specified_locale
         }
       end
-      it_behaves_like :handled_with_specified_locale
-      it_behaves_like :remember_specified_locale
+      it_behaves_like :handled_with_expected_locale
+      it_behaves_like :remember_expected_locale
 
       context 'when cookie_key is specified' do
         let(:app) { described_class.new Rack::LocaleMemorable::TestApplication.new, params_key: params_key, cookie_key: cookie_key }
         let(:cookie_key) { 'ui_locale' }
-        it_behaves_like :handled_with_specified_locale
-        it_behaves_like :remember_specified_locale
+        it_behaves_like :handled_with_expected_locale
+        it_behaves_like :remember_expected_locale
       end
     end
 
@@ -265,7 +268,7 @@ RSpec.describe Rack::LocaleMemorable do
           'HTTP_COOKIE' => "#{cookie_key}=#{specified_locale}"
         }
       end
-      it_behaves_like :handled_with_specified_locale
+      it_behaves_like :handled_with_expected_locale
       it_behaves_like :remember_no_locale
     end
 
