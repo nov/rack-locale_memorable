@@ -1,5 +1,11 @@
 ## [Unreleased]
 
+## [1.0.0] - 2022-10-01
+
+### Changed
+
+- remove activesupport https://github.com/nov/rack-locale_memorable/pull/2
+
 ## [0.5.0] - 2022-10-01
 
 ### Changed
