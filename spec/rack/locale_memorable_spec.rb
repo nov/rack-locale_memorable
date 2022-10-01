@@ -43,7 +43,8 @@ RSpec.describe Rack::LocaleMemorable do
   shared_examples :remember_expected_locale do
     it 'should remember expected locale' do
       _status, headers, _body = request
-      expect(headers['Set-Cookie']).not_to be_blank
+      expect(headers['Set-Cookie']).not_to be_nil
+      expect(headers['Set-Cookie']).not_to be_empty
       expect(headers['Set-Cookie']).to include "#{cookie_key}=#{expected_locale}"
     end
   end
@@ -51,7 +52,7 @@ RSpec.describe Rack::LocaleMemorable do
   shared_examples :remember_no_locale do
     it 'should not remember any locale' do
       _status, headers, _body = request
-      expect(headers['Set-Cookie']).to be_blank
+      expect(headers['Set-Cookie']).to be_nil
     end
   end
 
@@ -205,7 +206,7 @@ RSpec.describe Rack::LocaleMemorable do
     end
   end
 
-  [',en', 'fr', 'fr;q=0.9, zh;q=0.8, de;q=0.7, *;q=0.5'].each do |specified_locale|
+  ['', ',en', 'fr', 'fr;q=0.9, zh;q=0.8, de;q=0.7, *;q=0.5'].each do |specified_locale|
     context "with locale=#{specified_locale}" do
       context 'via query' do
         let(:params) do
@@ -285,7 +286,7 @@ RSpec.describe Rack::LocaleMemorable do
       context 'when lifetime is specified' do
         let(:cookie_options) do
           {
-            lifetime: 3.months
+            lifetime: 7776000
           }
         end
 
@@ -293,7 +294,7 @@ RSpec.describe Rack::LocaleMemorable do
           Timecop.freeze do
             expect_any_instance_of(Rack::LocaleMemorable::Response).to receive(:set_cookie).with(cookie_key, {
               value: expected_locale.to_s,
-              expires: cookie_options[:lifetime].from_now,
+              expires: Time.at(Time.now.to_i + cookie_options[:lifetime]),
               path: '/',
               http_only: true,
               secure: true
@@ -314,7 +315,7 @@ RSpec.describe Rack::LocaleMemorable do
           Timecop.freeze do
             expect_any_instance_of(Rack::LocaleMemorable::Response).to receive(:set_cookie).with(cookie_key, {
               value: expected_locale.to_s,
-              expires: 1.year.from_now,
+              expires: Time.at(Time.now.to_i + 31536000),
               domain: cookie_options[:domain],
               path: '/',
               http_only: true,
@@ -336,7 +337,7 @@ RSpec.describe Rack::LocaleMemorable do
           Timecop.freeze do
             expect_any_instance_of(Rack::LocaleMemorable::Response).to receive(:set_cookie).with(cookie_key, {
               value: expected_locale.to_s,
-              expires: 1.year.from_now,
+              expires: Time.at(Time.now.to_i + 31536000),
               path: cookie_options[:path],
               http_only: true,
               secure: true
@@ -357,7 +358,7 @@ RSpec.describe Rack::LocaleMemorable do
           Timecop.freeze do
             expect_any_instance_of(Rack::LocaleMemorable::Response).to receive(:set_cookie).with(cookie_key, {
               value: expected_locale.to_s,
-              expires: 1.year.from_now,
+              expires: Time.at(Time.now.to_i + 31536000),
               path: '/',
               http_only: false,
               secure: true
@@ -378,7 +379,7 @@ RSpec.describe Rack::LocaleMemorable do
           Timecop.freeze do
             expect_any_instance_of(Rack::LocaleMemorable::Response).to receive(:set_cookie).with(cookie_key, {
               value: expected_locale.to_s,
-              expires: 1.year.from_now,
+              expires: Time.at(Time.now.to_i + 31536000),
               path: '/',
               http_only: true,
               secure: false
