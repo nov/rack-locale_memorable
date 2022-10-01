@@ -1,4 +1,4 @@
-name: Ruby
+name: RSpec
 
 on:
   push:
@@ -26,5 +26,5 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
-    - name: Run the default task
-      run: bundle exec rake
+    - name: RSpec
+      run: bundle exec rake spec

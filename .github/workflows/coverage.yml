@@ -1,0 +1,25 @@
+name: Coverage
+
+on:
+  pull_request:
+
+env:
+  GITHUB_ACTIONS: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Ruby Head
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: head
+        bundler-cache: true
+    - name: RSpec
+      run: bundle exec rake spec
+    - name: Simplecov Report
+      uses: aki77/simplecov-report-action@v1
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
