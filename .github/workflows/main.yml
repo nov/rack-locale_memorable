@@ -26,5 +26,10 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
-    - name: Run the default task
-      run: bundle exec rake
+    - name: Rake Spec
+      run: bundle exec rake spec
+    - name: Report Coverage
+      uses: romeovs/lcov-reporter-action@v0.2.16
+      with:
+        lcov-file: ./coverage/lcov/ruby-simplecov.lcov
+        github-token: ${{ secrets.GITHUB_TOKEN }}
