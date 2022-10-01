@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-require 'active_support'
-require 'active_support/core_ext'
+require 'i18n'
 require 'http/accept'
 require 'rack'
 
@@ -20,7 +19,7 @@ module Rack
         env['rack.locale'] = I18n.locale.to_s
         status, headers, body = @app.call(env)
         response = Response.new body, status, headers
-        if request.explicit_locale.present?
+        if request.explicit_locale
           response.remember_locale request.explicit_locale, key: @cookie_key, **@cookie_options
         end
         response.finish

@@ -28,7 +28,7 @@ module Rack
       end
 
       def primary_locale_from(locales)
-        available_locales_from(locales)&.first if locales.present?
+        available_locales_from(locales)&.first if locales
       end
 
       def available_locales_from(locales)
