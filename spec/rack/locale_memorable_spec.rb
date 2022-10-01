@@ -32,7 +32,7 @@ RSpec.describe Rack::LocaleMemorable do
   end
 
   shared_examples :handled_with_expected_locale do
-    it 'should use specified locale' do
+    it 'should use expected locale' do
       _status, headers, body = request
       expect(headers['Content-Language']).to eq expected_locale.to_s
       expect(body).to eq expected_locale
@@ -41,7 +41,7 @@ RSpec.describe Rack::LocaleMemorable do
   end
 
   shared_examples :remember_expected_locale do
-    it 'should remember specified locale' do
+    it 'should remember expected locale' do
       _status, headers, _body = request
       expect(headers['Set-Cookie']).not_to be_blank
       expect(headers['Set-Cookie']).to include "#{cookie_key}=#{expected_locale}"
@@ -49,7 +49,7 @@ RSpec.describe Rack::LocaleMemorable do
   end
 
   shared_examples :remember_no_locale do
-    it 'should not remember specified locale' do
+    it 'should not remember any locale' do
       _status, headers, _body = request
       expect(headers['Set-Cookie']).to be_blank
     end

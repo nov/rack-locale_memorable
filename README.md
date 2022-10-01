@@ -90,26 +90,26 @@ Rack::LocaleMemorable
         when different locale is included
           in cookie
             behaves like handled_with_expected_locale
-              should use specified locale
+              should use expected locale
             behaves like remember_expected_locale
-              should remember specified locale
+              should remember expected locale
           in header
             behaves like handled_with_expected_locale
-              should use specified locale
+              should use expected locale
             behaves like remember_expected_locale
-              should remember specified locale
+              should remember expected locale
           in cookie & header
             behaves like handled_with_expected_locale
-              should use specified locale
+              should use expected locale
             behaves like remember_expected_locale
-              should remember specified locale
+              should remember expected locale
       via cookie
         when different locale is included
           in header
             behaves like handled_with_expected_locale
-              should use specified locale
+              should use expected locale
             behaves like remember_no_locale
-              should not remember specified locale
+              should not remember any locale
               :
 ```
 
