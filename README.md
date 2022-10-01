@@ -60,7 +60,7 @@ Rails.application.configure do |config|
 end
 ```
 
-NOTE: If you're using devise, set `Rack::LocaleMemorable` before `Warden::Manager`, otherwise you see warden error messages in wrong locale.
+NOTE: If you're using devise, set `Rack::LocaleMemorable` before `Warden::Manager`, otherwise you might see warden error messages in wrong locale.
 
 ```ruby
 Rails.application.configure do |config|
