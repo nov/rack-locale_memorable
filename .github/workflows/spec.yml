@@ -26,7 +26,7 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
-    - name: Rspec
+    - name: RSpec
       run: bundle exec rake spec
     - name: Report Coverage
       uses: romeovs/lcov-reporter-action@v0.2.16
