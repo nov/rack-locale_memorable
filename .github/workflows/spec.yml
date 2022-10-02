@@ -29,7 +29,6 @@ jobs:
     - name: RSpec
       run: bundle exec rake spec
     - name: Report Coverage
-      uses: romeovs/lcov-reporter-action@v0.2.16
+      uses: aki77/simplecov-report-action@v1
       with:
-        lcov-file: ./coverage/lcov/rack-locale_memorable.lcov
-        github-token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.GITHUB_TOKEN }}

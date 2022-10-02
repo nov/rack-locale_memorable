@@ -2,12 +2,6 @@
 
 require 'simplecov'
 
-if ENV['GITHUB_ACTIONS']
-  require 'simplecov-lcov'
-  SimpleCov::Formatter::LcovFormatter.config.report_with_single_file = true
-  SimpleCov.formatter = SimpleCov::Formatter::LcovFormatter
-end
-
 SimpleCov.start do
   add_filter 'spec'
 end
