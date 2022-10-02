@@ -28,6 +28,7 @@ jobs:
         bundler-cache: true
     - name: RSpec
       run: bundle exec rake spec
+  coverage:
     - name: Report Coverage
       uses: aki77/simplecov-report-action@v1
       with:
