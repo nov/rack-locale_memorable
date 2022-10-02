@@ -19,7 +19,8 @@ jobs:
         bundler-cache: true
     - name: RSpec
       run: bundle exec rake spec
-    - name: Simplecov Report
+    - name: Coverage Report
       uses: aki77/simplecov-report-action@v1
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
+        failedThreshold: 99.9
