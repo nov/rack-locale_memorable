@@ -31,5 +31,5 @@ jobs:
     - name: Report Coverage
       uses: romeovs/lcov-reporter-action@v0.2.16
       with:
-        lcov-file: ./coverage/lcov/ruby-simplecov.lcov
+        lcov-file: ./coverage/lcov/rack-locale_memorable.lcov
         github-token: ${{ secrets.GITHUB_TOKEN }}
