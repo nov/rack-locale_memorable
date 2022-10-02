@@ -28,3 +28,8 @@ jobs:
         bundler-cache: true
     - name: RSpec
       run: bundle exec rake spec
+    - uses: joshmfrankel/simplecov-check-action@main
+      with:
+        check_job_name: Coverage on Ruby ${{ matrix.ruby }}
+        minimum_suite_coverage: 99
+        github_token: ${{ secrets.GITHUB_TOKEN }}
