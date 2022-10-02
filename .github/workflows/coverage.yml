@@ -23,4 +23,4 @@ jobs:
       uses: aki77/simplecov-report-action@v1
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        failedThreshold: 99.9
+        failedThreshold: 99
