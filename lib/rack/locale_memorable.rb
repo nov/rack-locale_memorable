@@ -15,7 +15,7 @@ module Rack
 
     def call(env)
       request = Request.new env
-      I18n.with_locale(request.detect_locale params_key: @params_key, cookie_key: @cookie_key) do
+      I18n.with_locale request.detect_locale(params_key: @params_key, cookie_key: @cookie_key) do
         env['rack.locale'] = I18n.locale.to_s
         status, headers, body = @app.call(env)
         response = Response.new body, status, headers
