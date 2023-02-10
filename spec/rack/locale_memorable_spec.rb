@@ -388,6 +388,28 @@ RSpec.describe Rack::LocaleMemorable do
           end
         end
       end
+
+      context 'when same_site is specified' do
+        let(:cookie_options) do
+          {
+            same_site: :none
+          }
+        end
+
+        it 'should use it' do
+          Timecop.freeze do
+            expect_any_instance_of(Rack::LocaleMemorable::Response).to receive(:set_cookie).with(cookie_key, {
+              value: expected_locale.to_s,
+              expires: Time.at(Time.now.to_i + 31536000),
+              path: '/',
+              http_only: true,
+              secure: true,
+              same_site: :none
+            })
+            request
+          end
+        end
+      end
     end
   end
 end
