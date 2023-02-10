@@ -40,6 +40,7 @@ There are several customizable options listed below.
 * `cookie_options[:path]` (`/` by default)
 * `cookie_options[:http_only]` (`true` by default)
 * `cookie_options[:secure]` (`true` by default)
+* `cookie_options[:same_site]` (`nil` by default)
 
 You can customize them like below
 
@@ -54,7 +55,8 @@ Rails.application.configure do |config|
       domain:    'example.com',
       path:      '/localized',
       http_only: false,
-      secure:    Rails.env.production?
+      secure:    Rails.env.production?,
+      same_site  :none
     }
   )
 end
