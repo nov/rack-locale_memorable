@@ -6,6 +6,10 @@ on:
       - main
   pull_request:
 
+permissions:
+  contents: read
+  checks: write
+
 env:
   GITHUB_ACTIONS: true
 
